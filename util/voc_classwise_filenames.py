@@ -16,12 +16,12 @@ import numpy as np
 from PIL import Image
 
 # set path
-voc_dir = '../../data/Pascal/VOCdevkit/VOC2012/'
-seg_dir = os.path.join(voc_dir, 'SegmentationClassAug')
-trainaug_path = os.path.join(voc_dir, 'ImageSets', 'Segmentation', 'trainaug.txt')
-trainval_path = os.path.join(voc_dir, 'ImageSets', 'Segmentation', 'trainval.txt')
-train_path = os.path.join(voc_dir, 'ImageSets', 'Segmentation', 'train.txt')
-val_path = os.path.join(voc_dir, 'ImageSets', 'Segmentation', 'val.txt')
+voc_dir = "../../Data/VOC2012"
+seg_dir = os.path.join(voc_dir, 'PANet Data', 'SegmentationClassAug')
+trainaug_path = os.path.join(voc_dir, 'PANet Data', 'Segmentation', 'trainaug.txt')
+trainval_path = os.path.join(voc_dir, 'PANet Data', 'Segmentation', 'trainval.txt')
+train_path = os.path.join(voc_dir, 'PANet Data', 'Segmentation', 'train.txt')
+val_path = os.path.join(voc_dir, 'PANet Data', 'Segmentation', 'val.txt')
 
 # list filenames of all segmentation masks
 filenames = os.listdir(seg_dir)
@@ -46,7 +46,7 @@ dic = {'train': {},
        'trainval': {},
        'trainaug': {}}
 for split in dic:
-    os.makedirs(os.path.join(voc_dir, 'ImageSets', 'Segmentation', split), exist_ok=True)
+    os.makedirs(os.path.join(voc_dir, 'PANet Data', 'Segmentation', split), exist_ok=True)
 
 # check if each mask contains certain label
 for filename in filenames:
@@ -64,7 +64,7 @@ for filename in filenames:
 # write the result to file
 for split in dic:
     for label in dic[split].keys():
-        imageset_path = os.path.join(voc_dir, 'ImageSets', 'Segmentation', split,
+        imageset_path = os.path.join(voc_dir, 'PANet Data', 'Segmentation', split,
                                      'class{}.txt'.format(label))
         with open(imageset_path, 'w+') as f:
             for item in dic[split][label]:

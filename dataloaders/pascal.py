@@ -29,10 +29,10 @@ class VOC(BaseDataset):
         super().__init__(base_dir)
         self.split = split
         self._image_dir = os.path.join(self._base_dir, 'JPEGImages')
-        self._label_dir = os.path.join(self._base_dir, 'SegmentationClassAug')
-        self._inst_dir = os.path.join(self._base_dir, 'SegmentationObjectAug')
-        self._scribble_dir = os.path.join(self._base_dir, 'ScribbleAugAuto')
-        self._id_dir = os.path.join(self._base_dir, 'ImageSets', 'Segmentation')
+        self._label_dir = os.path.join(self._base_dir, 'PANet Data', 'SegmentationClassAug')
+        self._inst_dir = os.path.join(self._base_dir, 'PANet Data', 'SegmentationObjectAug')
+        self._scribble_dir = os.path.join(self._base_dir, 'PANet Data', 'ScribbleAugAuto')
+        self._id_dir = os.path.join(self._base_dir, 'PANet Data', 'Segmentation')
         self.transforms = transforms
         self.to_tensor = to_tensor
 

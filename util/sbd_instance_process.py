@@ -17,7 +17,7 @@ inst_path = os.path.join(voc_dir, 'SegmentationObject')
 inst_aug_path = os.path.join(sbd_dir, 'inst')
 
 # set target dirctory
-target_path = os.path.join(voc_dir, 'SegmentationObjectAug')
+target_path = os.path.join(voc_dir, 'PANet Data', 'SegmentationObjectAug')
 os.makedirs(target_path, exist_ok=True)
 
 # copy original VOC instance masks

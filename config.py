@@ -104,10 +104,10 @@ def cfg():
     path = {
         'log_dir': './runs',
         'init_path': './pretrained_model/vgg16-397923af.pth',
-        'VOC':{'data_dir': '../../data/Pascal/VOCdevkit/VOC2012/',
+        'VOC':{'data_dir': "../Data/VOC2012",
                'data_split': 'trainaug',},
-        'COCO':{'data_dir': '../../data/COCO/',
-                'data_split': 'train',},
+        # 'COCO':{'data_dir': '../../data/COCO/',
+        #         'data_split': 'train',},
     }
 
 @ex.config_hook
