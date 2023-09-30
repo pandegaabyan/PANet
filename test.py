@@ -34,14 +34,14 @@ def main(_run, _config, _log):
     torch.cuda.set_device(device=_config['gpu_id'])
     torch.set_num_threads(1)
 
-
     _log.info('###### Create model ######')
-    model = FewShotSeg(pretrained_path=_config['path']['init_path'], cfg=_config['model'])
+    model = FewShotSeg(
+        pretrained_path=_config['path']['init_path'], cfg=_config['model'])
     model = nn.DataParallel(model.cuda(), device_ids=[_config['gpu_id'],])
     if not _config['notrain']:
-        model.load_state_dict(torch.load(_config['snapshot'], map_location='cpu'))
+        model.load_state_dict(torch.load(
+            _config['snapshot'], map_location='cpu'))
     model.eval()
-
 
     _log.info('###### Prepare data ######')
     data_name = _config['dataset']
@@ -53,12 +53,12 @@ def main(_run, _config, _log):
         max_label = 80
     else:
         raise ValueError('Wrong config for dataset!')
-    labels = CLASS_LABELS[data_name]['all'] - CLASS_LABELS[data_name][_config['label_sets']]
+    labels = CLASS_LABELS[data_name]['all'] - \
+        CLASS_LABELS[data_name][_config['label_sets']]
     transforms = [Resize(size=_config['input_size'])]
     if _config['scribble_dilation'] > 0:
         transforms.append(DilateScribble(size=_config['scribble_dilation']))
     transforms = Compose(transforms)
-
 
     _log.info('###### Testing begins ######')
     metric = Metric(max_label=max_label, n_runs=_config['n_runs'])
@@ -85,10 +85,10 @@ def main(_run, _config, _log):
                                     num_workers=1, pin_memory=True, drop_last=False)
             _log.info(f"Total # of Data: {len(dataset)}")
 
-
             for sample_batched in tqdm.tqdm(testloader):
                 if _config['dataset'] == 'COCO':
-                    label_ids = [coco_cls_ids.index(x) + 1 for x in sample_batched['class_ids']]
+                    label_ids = [coco_cls_ids.index(
+                        x) + 1 for x in sample_batched['class_ids']]
                 else:
                     label_ids = list(sample_batched['class_ids'])
                 support_images = [[shot.cuda() for shot in way]
@@ -126,7 +126,8 @@ def main(_run, _config, _log):
                               np.array(query_labels[0].cpu()),
                               labels=label_ids, n_run=run)
 
-            classIoU, meanIoU = metric.get_mIoU(labels=sorted(labels), n_run=run)
+            classIoU, meanIoU = metric.get_mIoU(
+                labels=sorted(labels), n_run=run)
             classIoU_binary, meanIoU_binary = metric.get_mIoU_binary(n_run=run)
 
             _run.log_scalar('classIoU', classIoU.tolist())
@@ -138,7 +139,8 @@ def main(_run, _config, _log):
             _log.info(f'classIoU_binary: {classIoU_binary}')
             _log.info(f'meanIoU_binary: {meanIoU_binary}')
 
-    classIoU, classIoU_std, meanIoU, meanIoU_std = metric.get_mIoU(labels=sorted(labels))
+    classIoU, classIoU_std, meanIoU, meanIoU_std = metric.get_mIoU(
+        labels=sorted(labels))
     classIoU_binary, classIoU_std_binary, meanIoU_binary, meanIoU_std_binary = metric.get_mIoU_binary()
 
     _log.info('----- Final Result -----')

@@ -27,19 +27,17 @@ def main(_run, _config, _log):
             _run.observers[0].save_file(source_file, f'source/{source_file}')
         shutil.rmtree(f'{_run.observers[0].basedir}/_sources')
 
-
     set_seed(_config['seed'])
     cudnn.enabled = True
     cudnn.benchmark = True
     torch.cuda.set_device(device=_config['gpu_id'])
     torch.set_num_threads(1)
 
-
     _log.info('###### Create model ######')
-    model = FewShotSeg(pretrained_path=_config['path']['init_path'], cfg=_config['model'])
+    model = FewShotSeg(
+        pretrained_path=_config['path']['init_path'], cfg=_config['model'])
     model = nn.DataParallel(model.cuda(), device_ids=[_config['gpu_id'],])
     model.train()
-
 
     _log.info('###### Load data ######')
     data_name = _config['dataset']
@@ -74,7 +72,8 @@ def main(_run, _config, _log):
 
     _log.info('###### Set optimizer ######')
     optimizer = torch.optim.SGD(model.parameters(), **_config['optim'])
-    scheduler = MultiStepLR(optimizer, milestones=_config['lr_milestones'], gamma=0.1)
+    scheduler = MultiStepLR(
+        optimizer, milestones=_config['lr_milestones'], gamma=0.1)
     criterion = nn.CrossEntropyLoss(ignore_index=_config['ignore_label'])
 
     i_iter = 0
@@ -111,7 +110,6 @@ def main(_run, _config, _log):
         _run.log_scalar('align_loss', align_loss)
         log_loss['loss'] += query_loss
         log_loss['align_loss'] += align_loss
-
 
         # print loss and take snapshots
         if (i_iter + 1) % _config['print_interval'] == 0:
