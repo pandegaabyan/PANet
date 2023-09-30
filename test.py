@@ -31,13 +31,15 @@ def main(_run, _config, _log):
     set_seed(_config['seed'])
     cudnn.enabled = True
     cudnn.benchmark = True
-    torch.cuda.set_device(device=_config['gpu_id'])
+    if _config['gpu_id']:
+        torch.cuda.set_device(device=_config['gpu_id'])
     torch.set_num_threads(1)
 
     _log.info('###### Create model ######')
     model = FewShotSeg(
         pretrained_path=_config['path']['init_path'], cfg=_config['model'])
-    model = nn.DataParallel(model.cuda(), device_ids=[_config['gpu_id'],])
+    if _config['gpu_id']:
+        model = nn.DataParallel(model.cuda(), device_ids=[_config['gpu_id'],])
     if not _config['notrain']:
         model.load_state_dict(torch.load(
             _config['snapshot'], map_location='cpu'))
