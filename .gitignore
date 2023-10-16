@@ -1,6 +1,6 @@
 runs/
 __pycache__/
 *.pth
-*.ipynb
+# *.ipynb
 *DS_Store
 # *.sh
